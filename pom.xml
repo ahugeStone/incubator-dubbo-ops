@@ -294,7 +294,13 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.0.0</version>
                 <configuration>
-                    <imageName>${docker.image.prefix}/dubbo-opt</imageName>
+                    <imageName>${docker.image.prefix}/dubbo-ops</imageName>
+					<imageTags>
+                        <!-- 修改版本号 -->
+						<!--<imageTag>2019.3.2.01</imageTag>-->
+						<imageTag>latest</imageTag>
+					</imageTags>
+                    <forceTags>true</forceTags>
                     <dockerDirectory>${project.basedir}/src/docker</dockerDirectory>
                     <resources>
                         <resource>
@@ -303,6 +309,8 @@
                             <include>dubbo-admin-0.1.jar</include>
                         </resource>
                     </resources>
+                    <!-- 与maven配置文件settings.xml中配置的server.id一致，用于推送镜像 -->
+                    <serverId>docker-hub</serverId>
                 </configuration>
             </plugin>
 		</plugins>
