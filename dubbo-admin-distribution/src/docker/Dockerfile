@@ -7,4 +7,4 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV PARAMS=""
 ADD dubbo-admin-0.1.jar dubbo-admin-0.1.jar
 #ENTRYPOINT ["java","-jar","/dubbo-admin-0.1.jar","-Djava.security.egd=file:/dev/./urandom"]
-ENTRYPOINT ["sh","-c","java -jar /dubbo-admin-0.1.jar --$PARAMS"]
+ENTRYPOINT ["sh","-c","java -jar /dubbo-admin-0.1.jar $PARAMS"]
