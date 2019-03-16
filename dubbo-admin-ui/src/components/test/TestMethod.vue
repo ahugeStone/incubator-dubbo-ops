@@ -52,6 +52,8 @@
   import JsonEditor from '@/components/public/JsonEditor'
   import Breadcrumb from '@/components/public/Breadcrumb'
   import axios from 'axios'
+  import set from 'lodash/set'
+  import util from '@/util'
 
   export default {
     name: 'TestMethod',
@@ -110,11 +112,13 @@
       },
 
       convertType (params, types) {
-        for (let i = 0; i < params.length; i++) {
-          if (typeof types[i] === 'string' && typeof params[i] !== 'string') {
-            params[i] = String(params[i])
+        const p = util.flattenObject(params)
+        const t = util.flattenObject(types)
+        Object.keys(p).forEach(key => {
+          if (typeof t[key] === 'string' && typeof p[key] !== 'string') {
+            set(params, key, String(p[key]))
           }
-        }
+        })
       }
     },
     mounted () {
@@ -127,16 +131,13 @@
         this.method.parameterTypes = parametersTypes.split(';')
       }
 
-      this.$axios.get('/test/method', {
-        params: {
-          application: this.application,
-          service: this.service,
-          method: method
-        }
-      }).then(response => {
-        this.method.json = response.data.parameterTypes
-        this.method.jsonTypes = response.data.parameterTypes
-      })
+      let url = '/test/method?' + 'application=' + this.application +
+                '&service=' + this.service + '&method=' + method
+      this.$axios.get(encodeURI(url))
+        .then(response => {
+          this.method.json = response.data.parameterTypes
+          this.method.jsonTypes = response.data.parameterTypes
+        })
     }
   }
 </script>
