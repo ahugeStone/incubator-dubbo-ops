@@ -287,11 +287,15 @@
       },
       submit: function () {
         this.filter = document.querySelector('#serviceSearch').value.trim()
-        this.search(this.filter, true)
+        this.search(true)
       },
-      search: function (filter, rewrite) {
+      search: function (rewrite) {
+        if (!this.filter) {
+          this.$notify.error('Either service or application is needed')
+          return
+        }
         let type = this.items[this.selected].value
-        let url = '/rules/route/condition/?' + type + '=' + filter
+        let url = '/rules/route/condition/?' + type + '=' + this.filter
         this.$axios.get(url)
           .then(response => {
             if (this.selected === 0) {
@@ -301,9 +305,9 @@
             }
             if (rewrite) {
               if (this.selected === 0) {
-                this.$router.push({path: 'routingRule', query: {service: filter}})
+                this.$router.push({path: 'routingRule', query: {service: this.filter}})
               } else if (this.selected === 1) {
-                this.$router.push({path: 'routingRule', query: {application: filter}})
+                this.$router.push({path: 'routingRule', query: {application: this.filter}})
               }
             }
           })
@@ -393,6 +397,7 @@
         } else {
           itemId = item.application
         }
+        let oldItemId = itemId
         if (itemId.includes('/')) {
           itemId = itemId.replace('/', '*')
         }
@@ -414,17 +419,17 @@
               })
             break
           case 'block':
-            this.openWarn(' Are you sure to block Routing Rule', 'service: ' + itemId)
+            this.openWarn(' Are you sure to block Routing Rule', 'service: ' + oldItemId)
             this.warnStatus.operation = 'disable'
             this.warnStatus.id = itemId
             break
           case 'check_circle_outline':
-            this.openWarn(' Are you sure to enable Routing Rule', 'service: ' + itemId)
+            this.openWarn(' Are you sure to enable Routing Rule', 'service: ' + oldItemId)
             this.warnStatus.operation = 'enable'
             this.warnStatus.id = itemId
             break
           case 'delete':
-            this.openWarn(' Are you sure to Delete Routing Rule', 'service: ' + itemId)
+            this.openWarn('warnDeleteRouteRule', 'service: ' + oldItemId)
             this.warnStatus.operation = 'delete'
             this.warnStatus.id = itemId
         }
@@ -519,7 +524,7 @@
       })
       if (filter !== null) {
         this.filter = filter
-        this.search(filter, false)
+        this.search(false)
       }
     }
 
