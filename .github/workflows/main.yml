@@ -9,8 +9,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
+    - name: Initialization environment
+      run: |
+        pwd
+        la -al
+        sudo -E apt-get update
+        sudo -E apt-get -y install maven2
+        sudo -E apt-get clean
+        mvn -version
     - name: Run a multi-line script
       run: |
         echo Add other actions to build,
