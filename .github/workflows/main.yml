@@ -11,13 +11,15 @@ jobs:
     - uses: actions/checkout@v1
     - name: Initialization environment
       run: |
-        pwd
-        ls -al
         sudo -E apt-get update
         sudo -E apt-get -y install maven
         sudo -E apt-get clean
         mvn -version
-    - name: Run a multi-line script
+    - name: build
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        mvn clean package
+    - name : Upload artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: dubbo-ops
+        path: dubbo-admin-distribution/target
