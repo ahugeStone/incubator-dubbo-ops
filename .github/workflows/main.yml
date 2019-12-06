@@ -12,7 +12,7 @@ jobs:
     - name: Initialization environment
       run: |
         pwd
-        la -al
+        ls -al
         sudo -E apt-get update
         sudo -E apt-get -y install maven2
         sudo -E apt-get clean
