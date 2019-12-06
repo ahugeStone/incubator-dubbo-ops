@@ -22,4 +22,4 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: dubbo-ops
-        path: dubbo-admin-distribution/target
+        path: dubbo-admin-distribution/target/dubbo-admin-0.1.jar
